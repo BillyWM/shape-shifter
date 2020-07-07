@@ -1,0 +1,12 @@
+{
+  "name": "shape-shifter",
+  "version": "1.0.0",
+  "description": "A language for creative coding",
+  "main": "index.js",
+  "repository": "https://github.com/BillyWM/shape-shifter.git",
+  "author": "William Wenge-Murphy <billy@wenge-murphy.com>",
+  "license": "AGPL",
+  "dependencies": {
+    "pegjs": "^0.10.0"
+  }
+}
