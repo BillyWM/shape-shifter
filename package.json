@@ -9,5 +9,11 @@
   "dependencies": {
     "pegjs": "^0.10.0",
     "two.js": "^0.7.0-stable.1"
+  },
+  "devDependencies": {
+    "jest": "^26.1.0"
+  },
+  "scripts": {
+    "test": "jest"
   }
 }
