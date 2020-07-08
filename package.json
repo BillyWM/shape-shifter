@@ -7,6 +7,7 @@
   "author": "William Wenge-Murphy <billy@wenge-murphy.com>",
   "license": "AGPL",
   "dependencies": {
-    "pegjs": "^0.10.0"
+    "pegjs": "^0.10.0",
+    "two.js": "^0.7.0-stable.1"
   }
 }

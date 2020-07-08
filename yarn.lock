@@ -6,3 +6,8 @@ pegjs@^0.10.0:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/pegjs/-/pegjs-0.10.0.tgz#cf8bafae6eddff4b5a7efb185269eaaf4610ddbd"
   integrity sha1-z4uvrm7d/0tafvsYUmnqr0YQ3b0=
+
+two.js@^0.7.0-stable.1:
+  version "0.7.0-stable.1"
+  resolved "https://registry.yarnpkg.com/two.js/-/two.js-0.7.0-stable.1.tgz#4999070a566c3ab1b2ba980134d0d786b46ce2db"
+  integrity sha512-4QULPtstGEyGbhMvVvCGxgm85Un6CMYqFYafw7hNan9LdqoYZqMnxsaj8pkfBT4zpRfqB98aZjGrWYoCBqKtXA==
