@@ -5,15 +5,17 @@
   "main": "index.js",
   "repository": "https://github.com/BillyWM/shape-shifter.git",
   "author": "William Wenge-Murphy <billy@wenge-murphy.com>",
-  "license": "AGPL",
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "pegjs": "^0.10.0",
     "two.js": "^0.7.0-stable.1"
   },
   "devDependencies": {
-    "jest": "^26.1.0"
+    "jest": "^26.1.0",
+    "parcel-bundler": "^1.12.4"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "parcel index.html"
   }
 }

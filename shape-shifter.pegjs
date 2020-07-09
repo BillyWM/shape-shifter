@@ -2,77 +2,63 @@
     function makeNumber(digits) {
         return parseInt(digits.join(""));
     };
-}
 
-// 4x5 grid of circles
-// 4 by 5 grid of squares
+    function makeDimensionedGrid(grid, dim) {
+        let gridOut = Object.assign({}, grid);
+        gridOut.dimensions = dim;
+
+        return gridOut;
+    }
+
+    function makeString() {}
+}
 
 start =
     DimensionedGrid / Grid
 
 DimensionedGrid =
-    Dimension ___ Grid
+    dim:Dimension ___ grid:Grid
+            { return makeDimensionedGrid(grid, dim) }
 
 Grid =
-    "grid of" ___ ShapePlural
+    "grid of" ___ children:ShapePlural
+            { return { nodeType: "GROUP", groupType: "GRID", children: children }}
 
 Dimension =
-    Integer _ "by" _ Integer      /
-    Integer ___ "x" ___ Integer
+    w:Integer _ "by" _ h:Integer
+            { return { nodeType: "DIMENSIONS", width: w, height: h } }      /
+    w:Integer ___ "x" ___ h:Integer
+            { return { nodeType: "DIMENSIONS", width: w, height: h } }
 
 ShapePlural =
     BasicShapePlural / CustomShape
 
 BasicShape =
-    "circle" / "square"
+    // do all regular polygons plus some extras
+    // syntax like "17-sided polygon" when we get high enough?
+    "circle" / "square" / "triangle" / "hexagon" / "cross" / "line" 
 
 BasicShapePlural =
-    "circles" / "squares"
+    "circles" / "squares" / "triangles" / "hexagons" / "crosses" / "lines"
 
 
 // Identifiers are capitalized e.g. One Pointy Boi
 CustomShape =
     CapitalizedWord (___ CapitalizedWord)*
 
-
-// ------------- primitives -------------------------
-// invalid: "...and zero", "ten three"
-
-IntegerWord =
-    Integer100to999 / Integer10to99 / IntegerWordOnes
-IntegerWordOnes =
-    "zero" / IntegerWordSuffixableOnes
-IntegerWordSuffixableOnes =
-    "one" / "two" / "three" / "four" / "five" / "six" / "seven" / "eight" / "nine"
-IntegerWordTens =
-    "ten" / IntegerWordPreifxableTens
-IntegerWordPreifxableTens =
-    "twenty" / "thirty" / "forty" / "fifty" / "sixty" / "seventy" / "eighty" / "ninety"
-IntegerWordTeens =
-    "eleven" / "twelve" / "thirteen" / "fourteen" / "fifteen" / "sixteen" / "seventeen" /
-    "eighteen" / "nineteen"
-//Integer0to9 = <would be an alias of integerwordones but can't do that with Peg.js>
-Integer10to99 =
-    IntegerWordPreifxableTens ___ IntegerWordSuffixableOnes / IntegerWordTens
-Integer100to999 =
-    IntegerWordSuffixableOnes ___ "hundred" OptionalAnd Integer10to99 / "one hundred"
-OptionalAnd =
-    ___ "and" ___
-
-
 CapitalizedWord =
     [A-Z][a-z]+
 
 Integer =
-    digits:[\d]+ { makeNumber(digits); }
+    digits:[0-9]+   { return makeNumber(digits); }
 
 // required whitespace
 _ =
-    [\s]+
+    [ ]+            { return null }
 
 // optional whitespace (3 underscores).
 //      less common; longer to draw attention to it
-___ = [\s]*
+___ = [ ]*          { return null }
 
 
 // ---------------- todos ----------------------------
