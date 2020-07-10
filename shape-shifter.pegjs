@@ -10,18 +10,61 @@
         return gridOut;
     }
 
+    function flattenAndRemoveNulls(arr) {
+        arr = arr.flat(9);
+        arr = arr.filter( i => i != null );
+        return arr;
+    }
+
     function makeString() {}
 }
 
+// TODO next:
+//      line-by-line
+//      color expressions
+//      rotation expressions
+
 start =
-    OptionalMake grid:(DimensionedGrid / Grid)   { return grid }
+    lines:(Line+ SingleLine) { return { lines: lines.flat() } } /
+    SingleLine
+
+Line = 
+     ___ expr:Expression LineSeparator
+        { return expr }
+
+SingleLine =
+    ___ expr: Expression
+        { return expr }
+
+Expression =
+    expr:( GridExpression / ColorExpression )
+        { return expr }
+
+// A list of one or more colors
+// TODO: cyclic/range expressions with color (red green blue red...)
+// TODO: optional commas
+ColorExpression =
+        first:Color rest:ColorsRest
+            { return { nodeType: "COLOR_EXPRESSION", colors: [first, ...rest] } }
+
+Color =
+    modifier:(("light" / "dark" / "pastel") _)?
+    color:("red" / "green" / "blue" / "yellow" / "white" / "black" / "cyan" / "orange" / "pink")
+        { return { nodeType: "COLOR", modifier: modifier, color: color } }
+
+ColorsRest =
+    colors:(_ Color)* { return flattenAndRemoveNulls(colors); }
+
+GridExpression = 
+    OptionalMake grid:(DimensionedGrid / Grid)
+            { return grid }
 
 DimensionedGrid =
-    dim:Dimension ___ grid:Grid
+    dim:Dimension _ grid:Grid
             { return makeDimensionedGrid(grid, dim) }
 
 Grid =
-    "grid of" ___ children:ShapePlural
+    "grid of" _ children:ShapePlural
             { return { nodeType: "GROUP", groupType: "GRID", children: children }}
 
 OptionalMake =
@@ -63,6 +106,8 @@ _ =
 // optional whitespace (3 underscores).
 //      less common; longer to draw attention to it
 ___ = [ ]*          { return null }
+
+LineSeparator = ([\r][\n])+ / [\r\n]+
 
 
 // ---------------- todos ----------------------------

@@ -66,7 +66,7 @@ class Renderer {
 
     // Render a single element
     renderInit(el) {
-        let script = el.innerText;
+        let script = el.textContent.trim();
         let AST = this.parse(script);
         console.log("AST", AST);
 
@@ -92,7 +92,7 @@ class Renderer {
 
         // Starting with root node...
         // TODO: Root will not always be "GRID" or even "GROUP". Making assumption for now
-        let root = AST;
+        let root = AST.lines[0];
         let { two, scene } = this.getTagData(el);
 
         switch (root.groupType) {
