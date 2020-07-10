@@ -150,7 +150,7 @@ class Renderer {
         }
 
         let choice = this.randomInt(0, args.length - 1);
-        
+
         return args[choice];
     }
 

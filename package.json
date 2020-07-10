@@ -16,6 +16,7 @@
   },
   "scripts": {
     "test": "jest",
-    "dev": "parcel index.html"
+    "dev": "parcel index.html",
+    "build-grammar": "pegjs -o shape-shifter-parser.js shape-shifter.pegjs"
   }
 }

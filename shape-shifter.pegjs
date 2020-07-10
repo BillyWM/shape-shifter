@@ -14,7 +14,7 @@
 }
 
 start =
-    DimensionedGrid / Grid
+    OptionalMake grid:(DimensionedGrid / Grid)   { return grid }
 
 DimensionedGrid =
     dim:Dimension ___ grid:Grid
@@ -23,6 +23,10 @@ DimensionedGrid =
 Grid =
     "grid of" ___ children:ShapePlural
             { return { nodeType: "GROUP", groupType: "GRID", children: children }}
+
+OptionalMake =
+    ("make a" _)?
+            { return null }
 
 Dimension =
     w:Integer _ "by" _ h:Integer
