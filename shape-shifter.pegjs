@@ -49,7 +49,7 @@ ColorExpression =
 
 Color =
     modifier:(("light" / "dark" / "pastel") _)?
-    color:("red" / "green" / "blue" / "yellow" / "white" / "black" / "cyan" / "orange" / "pink")
+    color:("red" / "green" / "blue" / "yellow" / "white" / "black" / "cyan" / "orange" / "pink" / "teal" / "seagreen" )
         { return { nodeType: "COLOR", modifier: modifier, color: color } }
 
 ColorsRest =

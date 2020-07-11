@@ -74,6 +74,10 @@ class Renderer {
         window.requestAnimationFrame(renderStep);
     }
 
+    buidVariableGrid(args = {}) {
+
+    }
+
     buildScene(el, AST) {
 
         // Starting with root node...
@@ -88,45 +92,80 @@ class Renderer {
         //      maybe function that simply figures out measurements
         switch (root.groupType) {
             case "GRID":
-                let grid = two.makeGroup();
-                grid.translation.set(0, 0);
+                let modifiers = this.findModifiers(AST, root);
+                this.buildGrid({ root, two, scene, modifiers });
+                break;
+        }
+    }
 
-                let numAcross, numDown;
-                    numAcross = root.dimensions.width
-                    numDown = root.dimensions.height;
+    // Search AST for a grid modifier
+    // TODO: Context marking? Go through AST earlier and mark lines as being in "grid" context or not
+    findModifiers(AST, startLine) {
+        let foundStart = false;
+        let modifiers = [];
+        let startIndex = AST.lines.findIndex(x => x === startLine);
+        for (let i=startIndex; i < AST.lines.length; i++) {
+            let line = AST.lines[i];
 
-                let maxWidthEach = Math.floor(two.width / numAcross);
-                let maxHeightEach = Math.floor(two.height / numDown);
+            if (line.nodeType === "COLOR_EXPRESSION") {
+                modifiers.push(line);
+            }
+        }
 
-                // TODO: separate each shape slightly
-                let shapeType = this.depluralize(root.children);
-                switch (shapeType) {
-                    case "square":
+        return modifiers;
+    }
 
-                        let sizeEach = Math.min(maxWidthEach, maxHeightEach);
+    buildGrid(args = {}) {
+        let { root, two, scene, modifiers } = args;
+        let grid = two.makeGroup();
+        grid.translation.set(0, 0);
 
-                        let offsetX = sizeEach / 2;
-                        let offsetY = sizeEach / 2;
+        let numAcross, numDown;
+            numAcross = root.dimensions.width
+            numDown = root.dimensions.height;
 
-                        for (let j=0; j < numDown; j++) {
-                            for (let i = 0; i < numAcross; i++) {
-                                let shape = two.makeRectangle(
-                                    offsetX, offsetY,
-                                    sizeEach * .8, sizeEach * .8
-                                );
-                                shape.fill = this.randomOneOf("red", "green", "blue");
-                                shape.noStroke();
-                                grid.add(shape);
-                                scene.push(shape);
+        let maxWidthEach = Math.floor(two.width / numAcross);
+        let maxHeightEach = Math.floor(two.height / numDown);
 
-                                offsetX += maxWidthEach;
-                            }
-                            offsetX = sizeEach / 2;
-                            offsetY += sizeEach;
-                        }
-                    break;
+        // TODO: separate each shape slightly
+        let shapeType = this.depluralize(root.children);
+        switch (shapeType) {
+            case "square":
+
+                let sizeEach = Math.min(maxWidthEach, maxHeightEach);
+
+                let offsetX = sizeEach / 2;
+                let offsetY = sizeEach / 2;
+
+                // TODO: Different way of doing modifiers entirely
+                let colorModifiers = modifiers.filter(x => x.nodeType=="COLOR_EXPRESSION");
+                let randomColors = null;
+
+                // TODO: This assumes there's only one color modifier worth considering
+                //          Not the correct way to do this
+                if (colorModifiers.length) {
+                    // TODO: extended colors like "pastel ___"
+                    randomColors = colorModifiers[0].colors.map(x => x.color);
+                    console.log(randomColors);
                 }
 
+                for (let j=0; j < numDown; j++) {
+                    for (let i = 0; i < numAcross; i++) {
+                        let shape = two.makeRectangle(
+                            offsetX, offsetY,
+                            sizeEach * .8, sizeEach * .8
+                        );
+                        shape.fill = randomColors ? this.randomOneOf(...randomColors) : "white";
+                        shape.noStroke();
+                        grid.add(shape);
+                        scene.push(shape);
+
+                        offsetX += maxWidthEach;
+                    }
+                    offsetX = sizeEach / 2;
+                    offsetY += sizeEach;
+                }
+            break;
         }
     }
 
