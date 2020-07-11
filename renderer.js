@@ -92,6 +92,8 @@ class Renderer {
 
         // Starting with root node...
         // TODO: Root will not always be "GRID" or even "GROUP". Making assumption for now
+        // TODO: search for expressions (e.g. color expression) that modify grid expression
+        //      semantic analysis pass?
         let root = AST.lines[0];
         let { two, scene } = this.getTagData(el);
 
@@ -110,7 +112,6 @@ class Renderer {
                     case "square":
 
                         let sizeEach = Math.min(maxWidthEach, maxHeightEach);
-                        console.log("sizes", sizeEach, maxWidthEach, maxHeightEach);
 
                         let offsetX = sizeEach / 2;
                         let offsetY = sizeEach / 2;
