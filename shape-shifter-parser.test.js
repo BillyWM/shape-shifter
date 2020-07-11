@@ -2,7 +2,9 @@ let parser = require("./shape-shifter-parser.js");
 
 describe('grid expressions', ()=> {
     test("optional 'make' expression", () => {
-        let AST = parser.parse("make a 12x13 grid of squares");
+        let AST = parser.parse(
+            `make a 12x13 grid of squares`
+        );
     });
 
     test(`"by" syntax for grids`, ()=> {

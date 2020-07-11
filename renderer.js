@@ -2,20 +2,6 @@ let Two = require("two.js");
 let parser = require("./shape-shifter-parser.js");
 import "/index.scss";
 
-// let two = new Two({
-//     width: 600,
-//     height: 600
-// }).appendTo(document.getElementById("renderTarget"));
-
-// let width = 600, height = 600;
-// var rect = two.makeRectangle(width / 2, height / 2, 50, 50);
-// rect.fill = 'rgb(255, 100, 100)';
-// rect.noStroke();
- 
-// two.render();
-
-// -------------------
-
 class Renderer {
     constructor() {
         this.tagList = new Map();
@@ -97,14 +83,20 @@ class Renderer {
         let root = AST.lines[0];
         let { two, scene } = this.getTagData(el);
 
+        // TODO: Break down into different functions
+        //      variable/unspecified grid
+        //      maybe function that simply figures out measurements
         switch (root.groupType) {
             case "GRID":
-                let { width, height } = root.dimensions;
                 let grid = two.makeGroup();
                 grid.translation.set(0, 0);
 
-                let maxWidthEach = Math.floor(two.width / width);
-                let maxHeightEach = Math.floor(two.height / height);
+                let numAcross, numDown;
+                    numAcross = root.dimensions.width
+                    numDown = root.dimensions.height;
+
+                let maxWidthEach = Math.floor(two.width / numAcross);
+                let maxHeightEach = Math.floor(two.height / numDown);
 
                 // TODO: separate each shape slightly
                 let shapeType = this.depluralize(root.children);
@@ -116,8 +108,8 @@ class Renderer {
                         let offsetX = sizeEach / 2;
                         let offsetY = sizeEach / 2;
 
-                        for (let j=0; j < height; j++) {
-                            for (let i = 0; i < width; i++) {
+                        for (let j=0; j < numDown; j++) {
+                            for (let i = 0; i < numAcross; i++) {
                                 let shape = two.makeRectangle(
                                     offsetX, offsetY,
                                     sizeEach * .8, sizeEach * .8
@@ -136,8 +128,6 @@ class Renderer {
                 }
 
         }
-
-        // this.addShape(el, { type: "square", size: 50, color: "red" });
     }
 
     randomInt(min = 1, max = 1) {
@@ -188,8 +178,6 @@ class Renderer {
         }
 
         two.update();
-
-        // console.log(`rendering @ ${timestamp}`);
         window.requestAnimationFrame(renderStep);
     }
 }
